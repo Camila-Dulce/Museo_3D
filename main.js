@@ -29,7 +29,7 @@ const displacementTexture = textureLoader.load('./texturas/ladrilloHeig.png');
 // Ajustes
 albedoTexture.wrapS = THREE.RepeatWrapping; 
 albedoTexture.wrapT = THREE.RepeatWrapping; 
-albedoTexture.repeat.set(3, 1); // Ajusta estos valores según sea necesario 
+albedoTexture.repeat.set(3, 1); 
 normalTexture.wrapS = THREE.RepeatWrapping; 
 normalTexture.wrapT = THREE.RepeatWrapping; 
 normalTexture.repeat.set(3, 1); 
@@ -596,13 +596,14 @@ const crearSala1 = () => {
     sala1.position.set(25, 9, 9); 
     scene.add(sala1);
 
-    // Pared Derecha Vetical Pequeña
+    // Pared Derecha Vertical Pequeña
     const paredSalaPeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
     const paredSalaPeqMaterial = new THREE.MeshStandardMaterial({ color: 0xff083e }); 
     const salaPeq = new THREE.Mesh(paredSalaPeqGeometry, paredSalaPeqMaterial);
     salaPeq.rotation.y = -Math.PI / 2;  
     salaPeq.position.set(25, 9, 60); 
     scene.add(salaPeq);
+
 }
 
 const crearSala2 = () => {
@@ -638,7 +639,7 @@ const crearSala2 = () => {
 
 const crearSala3 = () => {
 
-    // Pared Mitad Superior Pequeña
+    // Pared Mitad inferior vertical Pequeña
     const paredSala3PeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
     const paredSala3PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffa7}); 
     const sala3Peq = new THREE.Mesh(paredSala3PeqGeometry, paredSala3PeqMaterial);
@@ -647,7 +648,7 @@ const crearSala3 = () => {
     scene.add(sala3Peq);
 }
 
-// Llamada a la función para crear el castillo
+// Llamada a cada función
 creacionCastillo();
 crearSala1();
 crearSala2();
