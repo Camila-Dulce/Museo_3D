@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import Stats from 'three/addons/libs/stats.module.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
@@ -11,9 +13,17 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 let aspectRatio = width / height;
 const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
-camera.position.set(0, 20, 80);
+camera.position.set(0, 60, -80);
 
 let controls = new OrbitControls(camera, renderer.domElement);
+// stats
+let container = document.getElementById( 'container' );
+const stats = new Stats()
+container.appendChild( stats.dom );
+// dat.GUI
+const gui = new GUI();
+gui.close()
+
 
 // Importación de texturas 
 const textureLoader = new THREE.TextureLoader();
@@ -603,6 +613,142 @@ const crearSala1 = () => {
     salaPeq.rotation.y = -Math.PI / 2;  
     salaPeq.position.set(25, 9, 60); 
     scene.add(salaPeq);
+
+    //Vitrina 1
+
+        // Soporte base 
+        const geometry1 = new THREE.BoxGeometry(64.2, 6.7, 23.8); 
+        const material1 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo = new THREE.Mesh(geometry1, material1);
+        cubo.rotation.y = -Math.PI / 2; 
+        cubo.position.set(75, -5, -7); 
+        scene.add(cubo);
+    
+        //Piso Base
+        const geometry3 = new THREE.BoxGeometry(60, 7.1, 19.7); 
+        const material3 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        const cubo3 = new THREE.Mesh(geometry3, material3);
+        cubo3.rotation.y = -Math.PI / 2; 
+        cubo3.position.set(75, -5, -7); 
+        scene.add(cubo3);
+
+         //Muro Separación
+         const geometry4 = new THREE.BoxGeometry(58, 29, 1); 
+         const material4 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+         const cubo4 = new THREE.Mesh(geometry4, material4);
+         cubo4.rotation.y = -Math.PI / 2; 
+         cubo4.position.set(75, 9, -7); 
+         scene.add(cubo4);
+        
+        // Base 
+        const geometry2 = new THREE.BoxGeometry(62, 29, 21.7); // Dimensiones ajustadas a la mitad
+        const material2 = new THREE.MeshPhongMaterial({
+        color: 0xffffff,       // Un tono de azul claro para simular vidrio
+        transparent: true,     // Habilita la transparencia
+        opacity: 0.4,          // Ajusta el nivel de transparencia (0 = completamente transparente)
+        shininess: 100,        // Da un acabado brillante
+        reflectivity: 0.7,     // Simula el efecto de reflejo
+        });
+        const cubo2 = new THREE.Mesh(geometry2, material2);
+        cubo2.rotation.y = -Math.PI / 2; 
+        cubo2.position.set(75, 9, -7);
+        scene.add(cubo2);
+    
+    // Vitrina 2 
+        // Soporte base 
+        const geometry5 = new THREE.BoxGeometry(11.9, 11, 11.9); 
+        const material5 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo5 = new THREE.Mesh(geometry5, material5);
+         
+        cubo5.position.set(45, -0.5, -74); //0, -1.5, -74
+        scene.add(cubo5);
+
+        const geometry6 = new THREE.BoxGeometry(13, 9.8, 12); 
+        const material6 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo6 = new THREE.Mesh(geometry6, material6);
+         
+        cubo6.position.set(45,-0.5,-74); 
+        scene.add(cubo6);
+
+        const geometry7 = new THREE.BoxGeometry(12, 9.8, 13); 
+        const material7 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo7 = new THREE.Mesh(geometry7, material7);
+         
+        cubo7.position.set(45,-0.5,-74); 
+        scene.add(cubo7);
+
+        //Vidrio
+        const geometry8 = new THREE.BoxGeometry(12, 16, 12); 
+        const material8 = new THREE.MeshPhongMaterial({
+            color: 0xffffff,       // Un tono de azul claro para simular vidrio
+            transparent: true,     // Habilita la transparencia
+            opacity: 0.4,          // Ajusta el nivel de transparencia (0 = completamente transparente)
+            shininess: 100,        // Da un acabado brillante
+            reflectivity: 0.7,     // Simula el efecto de reflejo
+            });
+            const cubo8 = new THREE.Mesh(geometry8, material8);
+         
+        cubo8.position.set(45,12,-74); 
+        scene.add(cubo8);
+
+        const geometry9 = new THREE.BoxGeometry(10, 0.5, 10); 
+        const material9 = new THREE.MeshBasicMaterial({ color: 0x646464 });
+        const cubo9 = new THREE.Mesh(geometry9, material9);
+         
+        cubo9.position.set(45,4.9,-74); 
+        scene.add(cubo9);
+
+        const geometry10 = new THREE.BoxGeometry(8, 0.7, 8); 
+        const material10 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        const cubo10 = new THREE.Mesh(geometry10, material10);
+         
+        cubo10.position.set(45,4.9,-74); 
+        scene.add(cubo10);
+
+    // Vitrina 3 
+        // Soporte base 
+        const geometry11 = new THREE.BoxGeometry(25, 11, 11.9); 
+        const material11 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo11 = new THREE.Mesh(geometry11, material11);
+         
+        cubo11.position.set(0, -0.5, -17); 
+        scene.add(cubo11);
+
+        //Vidrio
+        const geometry12 = new THREE.BoxGeometry(24, 14, 11); 
+        const material12 = new THREE.MeshPhongMaterial({
+            color: 0xffffff,       
+            transparent: true,     
+            opacity: 0.4,          
+            shininess: 100,        
+            reflectivity: 0.7,     
+            });
+            const cubo12 = new THREE.Mesh(geometry12, material12);
+         
+        cubo12.position.set(0,12,-17); 
+        scene.add(cubo12);
+
+        //Separación 
+        const geometry13 = new THREE.BoxGeometry(22, 13, 0.3); 
+        const material13 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        const cubo13 = new THREE.Mesh(geometry13, material13);
+         
+        cubo13.position.set(0,12,-14); 
+        scene.add(cubo13);
+
+    // const light = new THREE.DirectionalLight(0xffffff, 1);
+    // light.position.set(10, 20, 10);
+    // scene.add(light);
+
+    // Varillas base 
+    // const geometry3 = new THREE.BoxGeometry(0.7, 16.7, 0.7); 
+    // const material3 = new THREE.MeshBasicMaterial({ color: 0xc1e246 });
+    // const cubo3 = new THREE.Mesh(geometry3, material3);
+    // cubo3.position.set(0, 22.5045, 10.002); 
+    // scene.add(cubo3);
+
+
+    
 
 }
 
