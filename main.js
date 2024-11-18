@@ -637,6 +637,27 @@ const crearSala2 = () => {
     scene.add(sala1O);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const crearSala3 = () => {
 
     // Pared Mitad inferior vertical Pequeña
