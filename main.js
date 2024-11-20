@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'; // Cambiar por addons
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 
 
@@ -20,12 +20,39 @@ camera.position.set(0, 60, -80);
 
 let controls = new OrbitControls(camera, renderer.domElement);
 // stats
-let container = document.getElementById( 'container' );
-const stats = new Stats()
-container.appendChild( stats.dom );
+let container = document.getElementById('container');
+const stats = new Stats();
+container.appendChild(stats.dom);
+
 // dat.GUI
 const gui = new GUI();
-gui.close()
+gui.close();
+
+let params = {
+    color1: new THREE.Color(0xffffff),
+    intensidad1: 10,
+    distancia: 22,
+    decay: 0.5,
+
+    color2: new THREE.Color(0xddd622),
+    intensidad2: 6,
+
+};
+
+// GUI folders and controls / (object, property, [min], [max], [step])
+
+const PointLight = gui.addFolder("Point");
+PointLight.addColor(params, "color1");
+PointLight.add(params, "intensidad1", 0, 10, 0.05);
+PointLight.add(params, "distancia", -10, 100, 1);
+PointLight.add(params, "decay", 0, 5, 0.5)
+.onChange(ActualizarLuz);
+
+const RectAreaLight = gui.addFolder("RectArea");
+RectAreaLight.addColor(params, "color2");
+RectAreaLight.add(params, "intensidad2", 0, 10, 0.05)
+.onChange(ActualizarLuz);
+
 
 
 // Importación de texturas 
@@ -286,7 +313,6 @@ albedoTextureC.wrapS = THREE.RepeatWrapping;
 albedoTextureC.wrapT = THREE.RepeatWrapping; 
 albedoTextureC.repeat.set(3, 5); 
 
-
 //------------------------------
 // Samurai Escultura - Sala 3
 const albedoTextureS = textureLoader.load('./texturas/samuraiCol.png'); 
@@ -325,6 +351,15 @@ displacementTextureCuadro.repeat.set(5, 5);
 metalnessTextureCuadro.wrapS = THREE.RepeatWrapping; 
 metalnessTextureCuadro.wrapT = THREE.RepeatWrapping; 
 metalnessTextureCuadro.repeat.set(5, 5);
+
+//------------------------------
+// Tapete Centro Esculturas
+const albedoTextureTapete = textureLoader.load('./texturas/tapete.jpg'); 
+
+// Ajustes
+albedoTextureTapete.wrapS = THREE.RepeatWrapping; 
+albedoTextureTapete.wrapT = THREE.RepeatWrapping; 
+albedoTextureTapete.repeat.set(3, 5); 
 
 
 const creacionCastillo = () => {
@@ -666,7 +701,7 @@ const creacionCastillo = () => {
 const crearSala1 = () => {
     // Pared Derecha Vertical Grande
     const paredSala1traGeometry = new THREE.BoxGeometry(40, 30, 1); 
-    const paredSala1traMaterial = new THREE.MeshStandardMaterial({ color: 0xff083e }); 
+    const paredSala1traMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
     const sala1 = new THREE.Mesh(paredSala1traGeometry, paredSala1traMaterial);
     sala1.rotation.y = -Math.PI / 2;  
     sala1.position.set(25, 9, 9); 
@@ -674,7 +709,7 @@ const crearSala1 = () => {
 
     // Pared Derecha Vertical Pequeña
     const paredSalaPeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
-    const paredSalaPeqMaterial = new THREE.MeshStandardMaterial({ color: 0xff083e }); 
+    const paredSalaPeqMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
     const salaPeq = new THREE.Mesh(paredSalaPeqGeometry, paredSalaPeqMaterial);
     salaPeq.rotation.y = -Math.PI / 2;  
     salaPeq.position.set(25, 9, 60); 
@@ -813,23 +848,20 @@ const crearSala1 = () => {
     // cubo3.position.set(0, 22.5045, 10.002); 
     // scene.add(cubo3);
 
-
-    
-
 }
 
 const crearSala2 = () => {
 
     // Pared Mitad Horizontal Grande
     const paredSala2Geometry = new THREE.BoxGeometry(90, 30, 1); 
-    const paredSala2Material = new THREE.MeshStandardMaterial({ color: 0xff00fe }); 
+    const paredSala2Material = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
     const sala2 = new THREE.Mesh(paredSala2Geometry, paredSala2Material);
     sala2.position.set(-20, 9, -11); 
     scene.add(sala2);
 
     // Pared Mitad Superior Pequeña
     const paredSala2PeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
-    const paredSala2PeqMaterial = new THREE.MeshStandardMaterial({ color: 0xff00fe}); 
+    const paredSala2PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x000000}); 
     const sala2Peq = new THREE.Mesh(paredSala2PeqGeometry, paredSala2PeqMaterial);
     sala2Peq.rotation.y = -Math.PI / 2;  
     sala2Peq.position.set(-25, 9, -76); 
@@ -842,24 +874,19 @@ const crearSala2 = () => {
 
     // Pared Mitad Izquierda Vertical 
     const paredSala1OtraGeometry = new THREE.BoxGeometry(65, 30, 1); 
-    const paredSala1OtraMaterial = new THREE.MeshStandardMaterial({ color: 0xff00fe }); 
+    const paredSala1OtraMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
     const sala1O = new THREE.Mesh(paredSala1OtraGeometry, paredSala1OtraMaterial);
     sala1O.rotation.y = -Math.PI / 2;  
     sala1O.position.set(-25, 9, -6); 
     scene.add(sala1O);
 }
 
-
-
-
-
-
 let mano, cabeza, casco, samurai, monedas;
 
 const crearSala3 = () => {
     // Pared Mitad inferior vertical Pequeña
     const paredSala3PeqGeometry = new THREE.BoxGeometry(15, 30, 1);
-    const paredSala3PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffa7 });
+    const paredSala3PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
     const sala3Peq = new THREE.Mesh(paredSala3PeqGeometry, paredSala3PeqMaterial);
     sala3Peq.rotation.y = -Math.PI / 2;
     sala3Peq.position.set(-25, 9, 60);
@@ -877,7 +904,7 @@ const crearSala3 = () => {
             }
         });
 
-        object.position.set(-100, 0, 45);
+        object.position.set(-100, 4, 45);
         object.scale.set(6, 6, 6);
         scene.add(object);
         mano = object;
@@ -893,8 +920,9 @@ const crearSala3 = () => {
             }
         });
 
-        object.position.set(-105, 0, 10);
-        object.scale.set(10, 10, 10);
+        object.position.set(-105, 4, 10);
+        object.scale.set(5, 5, 5);
+        object.rotation.y = Math.PI / 2;
         scene.add(object);
         cabeza = object;
     });
@@ -911,8 +939,9 @@ const crearSala3 = () => {
             }
         });
 
-        object.position.set(-43, 9.5, 10);
-        object.scale.set(0.5, 0.5, 0.5);
+        object.position.set(-43, 7, 10);
+        object.rotation.y = -Math.PI / 2;
+        object.scale.set(0.2, 0.2, 0.2);
         scene.add(object);
         casco = object;
     });
@@ -929,8 +958,8 @@ const crearSala3 = () => {
             }
         });
 
-        object.position.set(-75, 1, 25);
-        object.scale.set(3, 3, 3);
+        object.position.set(-75, 3, 25);
+        object.scale.set(2, 2, 2);
         scene.add(object);
         samurai = object;
     });
@@ -953,66 +982,30 @@ const crearSala3 = () => {
             }
         });
 
-        object.position.set(-42, 1.5, 54);
+        object.position.set(-42, 4, 47); 
         object.rotation.x = Math.PI / 2;
-        object.scale.set(0.2, 0.2, 0.2);
+        object.scale.set(0.1, 0.1, 0.1);
         scene.add(object);
         monedas = object;
     });
-};
 
-// Crear la caja de vidrio y controlador
-const entradaMurosGeometry = new THREE.BoxGeometry(10, 12, 18.5);
-const entradaMurosMaterial = new THREE.MeshStandardMaterial({
-    map: albedoTexture3,
-    normalMap: normalTexture3,
-    roughnessMap: roughnessTexture3,
-    aoMap: aoTexture3,
-    displacementMap: displacementTexture3,
-    displacementScale: 0.2
-});
-const muros = new THREE.Mesh(entradaMurosGeometry, entradaMurosMaterial);
-muros.position.set(-20.5, -11, 89);
-scene.add(muros);
-
-const muros2 = muros.clone();
-muros2.position.set(20.5, -11, 89);
-scene.add(muros2);
-
-const vidrioGeometry = new THREE.BoxGeometry(25, 30, 40);
+    // Crear la caja de vidrio y controlador
+const vidrioGeometry = new THREE.BoxGeometry(25, 40, 30);
 const vidrioMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x888888,
-    metalness: 0.1,
-    roughness: 0.1,
-    transmission: 1.0,
-    opacity: 0.25,
-    transparent: true,
-    side: THREE.DoubleSide
-});
+    color: 0xffffff,       
+    transparent: true,    
+    opacity: 0.4,          
+    shininess: 100,        
+    reflectivity: 0.7,     
+    });
 
 const vidrio = new THREE.Mesh(vidrioGeometry, vidrioMaterial);
-vidrio.position.set(-100, 0, 45);
+vidrio.position.set(-75, 0, 25);
 scene.add(vidrio);
 
-const vidrio2 = vidrio.clone();
-vidrio2.position.set(-105, 0, 10);
-scene.add(vidrio2);
-
-const vidrio3 = vidrio.clone();
-vidrio3.position.set(-43, 0, 10);
-scene.add(vidrio3);
-
-const vidrio4 = vidrio.clone();
-vidrio4.position.set(-75, 0, 25);
-scene.add(vidrio4);
-
-const vidrio5 = vidrio.clone();
-vidrio5.position.set(-43, 0, 50);
-scene.add(vidrio5);
-
 // Crear una base para un objeto
-const baseGeometry = new THREE.CylinderGeometry(10, 10, 2, 32);
-const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+const baseGeometry = new THREE.CylinderGeometry(7, 7, 2, 32);
+const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x423f3e});
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
 base.position.set(-100, 0, 45);
 scene.add(base);
@@ -1030,97 +1023,77 @@ base4.position.set(-75, 0, 25);
 scene.add(base4);
 
 const base5 = base.clone();
-base5.position.set(-43, 0, 50);
+base5.position.set(-43, 0, 45);
 scene.add(base5);
 
+// Tapete centro
+const TapeteGeometry = new THREE.PlaneGeometry(30, 35); 
+const TapeteMaterial = new THREE.MeshStandardMaterial({ 
+    map: albedoTextureTapete, 
+  });
+  
+const tapete = new THREE.Mesh(TapeteGeometry, TapeteMaterial); 
+tapete.rotation.x = -Math.PI / 2;  
+tapete.position.set(-75, -5, 25);
+scene.add(tapete);
 
-    // // Crear base de brazo
-    // const baseGeometry = new THREE.BoxGeometry(0.7, 3, 0.5); 
-    // const baseMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Marrón 
-    // const baseMano = new THREE.Mesh(baseGeometry, baseMaterial); 
-    // baseMano.position.set(0, 3, 0);
-    // baseMano.rotation.x = -Math.PI / 4; 
-    // scene.add(baseMano); 
+};
 
-    // const base2Geometry = new THREE.BoxGeometry(0.5, 3, 0.5); 
-    // const base2Material = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Marrón 
-    // const baseMano2 = new THREE.Mesh(base2Geometry, base2Material); 
-    // baseMano2.position.set(1, 3, 0);
-    // baseMano2.rotation.x = -Math.PI / 4; 
-    // scene.add(baseMano2); 
+    // Luces point
+    const pointLight = new THREE.PointLight(0xffffff, params.intensidad1, params.distancia, params.decay);
+    pointLight.position.set(-105, 3, 10); // Ajustar la posición encima de la base2
+    scene.add(pointLight);
+    pointLight.castShadow = true;
 
-    // // Crear la palma 
-    // const palmaGeometry = new THREE.SphereGeometry(1, 32, 32); // Radio y segmentos del círculo 
-    // const palmaMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); 
-    // const palmaMano = new THREE.Mesh(palmaGeometry, palmaMaterial); 
-    // palmaMano.position.set(0.5, 5, -2);
-    // palmaMano.rotation.x = -Math.PI / 4; 
-    // scene.add(palmaMano);
+    const pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
+    scene.add(pointLightHelper);
 
-    // palmaMano.scale.x = 1.5; // Escalar en el eje X 
-    // palmaMano.scale.y = 1;
+    // Luz 2
+    // Clonar la luz y cambiar posición 
+    const pointLight2 = pointLight.clone(); 
+    pointLight2.position.set(-43, 5, 10); // Ajustar la posición para la segunda luz 
+    scene.add(pointLight2);
 
-    // // Crear los dedos 
-    // const dedosGeometry = new THREE.BoxGeometry(0.3, 1.5, 0.5); 
-    // const dedosMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
-    // const dedos = new THREE.Mesh(dedosGeometry, dedosMaterial); 
-    // dedos.rotation.x = -Math.PI / 4; 
-    // dedos.position.set(0, 6.5, -3.5);
-    // scene.add(dedos);
+    const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1); 
+    scene.add (pointLightHelper2);
 
-    // const dedos2 = dedos.clone(); 
-    // dedos2.position.set(0.5, 6.5, -3.5); 
-    // scene.add(dedos2);
+    // Luz 3
+    // Clonar la luz y cambiar posición 
+    const pointLight3 = pointLight.clone(); 
+    pointLight3.position.set(-43, 3, 45); // Ajustar la posición para la segunda luz 
+    scene.add(pointLight3);
 
-    // const dedos3 = dedos.clone(); 
-    // dedos3.position.set(1.0, 6.5, -3.5); 
-    // scene.add(dedos3);
-    
-    // const dedos4 = dedos.clone(); 
-    // dedos4.rotation.x = -Math.PI / 3; 
-    // dedos4.position.set(1.5, 6.5, -3.5);
-    // scene.add(dedos4);
+    const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1); 
+    scene.add (pointLightHelper3);
 
-    // // Segunda falanje
-    // const falanjesGeometry = new THREE.BoxGeometry(0.3, 1, 0.5); 
-    // const falanjesMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
-    // const falanjes = new THREE.Mesh(falanjesGeometry, falanjesMaterial); 
-    // falanjes.rotation.x = Math.PI / 2; 
-    // falanjes.position.set(0, 7, -4);
-    // scene.add(falanjes);
+    // Luz 4
+    // Clonar la luz y cambiar posición 
+    const pointLight4 = pointLight.clone(); 
+    pointLight4.position.set(-100, 3, 45); // Ajustar la posición para la segunda luz 
+    scene.add(pointLight4);
 
-    // const dedosF = falanjes.clone(); 
-    // dedos4.rotation.x = -Math.PI / 3; 
-    // dedosF.position.set(0, 7, -3.5); 
-    // scene.add(dedosF);
+    const pointLightHelper4 = new THREE.PointLightHelper(pointLight4, 1); 
+    scene.add (pointLightHelper4);
 
+    // Luces Rect
+    const widthAr = 5;
+    const heightAr = 5;
+    const intensity = 1;
+    const rectLight = new THREE.RectAreaLight(0xffffff, intensity, widthAr, heightAr);
+    rectLight.position.set(-75, 25, 25);
+    rectLight.lookAt(0, -25, 0);
+    scene.add(rectLight);
 
+    function ActualizarLuz() {
+        pointLight.color.set(params.color1);
+        pointLight.intensity = params.intensidad1;
+        pointLight.distance = params.distancia;
+        pointLight.decay = params.decay;
 
-    // function createFinger(x, y, z) { 
-    //     const fingerGeometry = new THREE.BoxGeometry(0.5, 3, 0.5); 
-    //     const fingerMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
-    //     const finger = new THREE.Mesh(fingerGeometry, fingerMaterial); 
-    //     finger.position.set(x, y, z); 
-    //     return finger; 
-    // } 
-    // Dedo pulgar 
-    // const thumb = createFinger(-2, 5, 0); 
-    // thumb.rotation.x = Math.PI / 4; // Rotar el pulgar 
-    // scene.add(thumb); 
-    // Dedo índice 
-    // const indexFinger = createFinger(1.5, 7, 0); 
-    // scene.add(indexFinger); 
-    // Dedo medio 
-    // const middleFinger = createFinger(0.5, 7, 0); 
-    // scene.add(middleFinger); 
-    // Dedo anular 
-    // const ringFinger = createFinger(-0.5, 7, 0); 
-    // scene.add(ringFinger); 
-    // Dedo meñique 
-    // const pinkyFinger = createFinger(-1.5, 7, 0); 
-    // pinkyFinger.rotation.x = -Math.PI / 6; // Rotar el meñique 
-    // scene.add(pinkyFinger);
+        rectLight.color.set(params.color2);
+        rectLight.intensity = params.intensidad2;
 
+    };
 
 // Llamada a cada función
 creacionCastillo();
@@ -1133,17 +1106,21 @@ const light = new THREE.AmbientLight(0xFFFFFF, 3);
 scene.add(light);
 
 function animate() {
-
-
     // Animaciones sala 3
 
     // Animación escultura centro
-    if (mano) { // Animación escultura centro
-         mano.rotation.y += 0.01; }
+    if (samurai) { // Animación escultura centro
+         samurai.rotation.y += 0.01; }
+
+    // Luces
+    pointLight.color.set(params.color1);
+    pointLight.intensity = params.intensidad1;
+    pointLight.distance = params.distancia;
+    pointLight.decay = params.decay;
 
     controls.update();
     renderer.render(scene, camera);
-}
+};
 
 
 
