@@ -1,7 +1,10 @@
 import * as THREE from 'three';
-import Stats from 'three/addons/libs/stats.module.js';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+
 
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
@@ -215,7 +218,7 @@ const metalnessTextureP = textureLoader.load('./texturas/pisoMetalic.jpg');
 // Piso Afuera
 const albedoTexturePA = textureLoader.load('./texturas/piedCol.png'); 
 const normalTexturePA = textureLoader.load('./texturas/piedNorm.png'); 
-const roughnessTexturePA = textureLoader.load('./texturas/piedRou.jpg'); 
+const roughnessTexturePA = textureLoader.load('./texturas/piedRou.png'); 
 const aoTexturePA = textureLoader.load('./texturas/piedAO.png'); 
 const displacementTexturePA = textureLoader.load('./texturas/piedHeig.png');  
 
@@ -260,6 +263,69 @@ aoTextureE.repeat.set(3, 0.5);
 displacementTextureE.wrapS = THREE.RepeatWrapping; 
 displacementTextureE.wrapT = THREE.RepeatWrapping; 
 displacementTextureE.repeat.set(3, 0.5);
+
+//------------------------------
+// Mano Escultura - Sala 3
+const albedoTextureM = textureLoader.load('./texturas/manoCol.jpg'); 
+const normalTextureM = textureLoader.load('./texturas/manoNorm.jpg'); 
+const roughnessTextureM = textureLoader.load('./texturas/manoRou.jpg'); 
+const aoTextureM = textureLoader.load('./texturas/manoAO.jpg'); 
+const displacementTextureM = textureLoader.load('./texturas/manoDis.jpg'); 
+
+// Ajustes
+albedoTextureM.wrapS = THREE.RepeatWrapping; 
+albedoTextureM.wrapT = THREE.RepeatWrapping; 
+albedoTextureM.repeat.set(3, 5); 
+
+//------------------------------
+// Casco Escultura - Sala 3
+const albedoTextureCasco = textureLoader.load('./texturas/cascoCol.jpg'); 
+
+// Ajustes
+albedoTextureC.wrapS = THREE.RepeatWrapping; 
+albedoTextureC.wrapT = THREE.RepeatWrapping; 
+albedoTextureC.repeat.set(3, 5); 
+
+
+//------------------------------
+// Samurai Escultura - Sala 3
+const albedoTextureS = textureLoader.load('./texturas/samuraiCol.png'); 
+
+// Ajustes
+albedoTextureC.wrapS = THREE.RepeatWrapping; 
+albedoTextureC.wrapT = THREE.RepeatWrapping; 
+albedoTextureC.repeat.set(3, 5); 
+
+//------------------------------
+// Monedas Escultura - Sala 3
+const albedoTextureCuadro = textureLoader.load('./texturas/cuadroCol.jpg'); 
+const normalTextureCuadro = textureLoader.load('./texturas/cuadroNorm.jpg'); 
+const roughnessTextureCuadro = textureLoader.load('./texturas/cuadroRou.jpg'); 
+const aoTextureCuadro = textureLoader.load('./texturas/cuadroAO.jpg'); 
+const displacementTextureCuadro = textureLoader.load('./texturas/cuadroHei.jpg'); 
+const metalnessTextureCuadro = textureLoader.load('./texturas/cuadroMetal.jpg');
+
+
+// Ajustes
+albedoTextureCuadro.wrapS = THREE.RepeatWrapping; 
+albedoTextureCuadro.wrapT = THREE.RepeatWrapping; 
+albedoTextureCuadro.repeat.set(5, 5); 
+normalTextureCuadro.wrapS = THREE.RepeatWrapping; 
+normalTextureCuadro.wrapT = THREE.RepeatWrapping;
+normalTextureCuadro.repeat.set(5, 5); 
+roughnessTextureCuadro.wrapS = THREE.RepeatWrapping; 
+roughnessTextureCuadro.wrapT = THREE.RepeatWrapping; 
+roughnessTextureCuadro.repeat.set(5, 5); 
+aoTextureCuadro.wrapS = THREE.RepeatWrapping; 
+aoTextureCuadro.wrapT = THREE.RepeatWrapping; 
+aoTextureCuadro.repeat.set(5, 5); 
+displacementTextureCuadro.wrapS = THREE.RepeatWrapping; 
+displacementTextureCuadro.wrapT = THREE.RepeatWrapping; 
+displacementTextureCuadro.repeat.set(5, 5);
+metalnessTextureCuadro.wrapS = THREE.RepeatWrapping; 
+metalnessTextureCuadro.wrapT = THREE.RepeatWrapping; 
+metalnessTextureCuadro.repeat.set(5, 5);
+
 
 const creacionCastillo = () => {
 
@@ -928,32 +994,273 @@ const crearSala2 = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+let mano, cabeza, casco, samurai, monedas;
 
 const crearSala3 = () => {
-
     // Pared Mitad inferior vertical Pequeña
-    const paredSala3PeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
-    const paredSala3PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffa7}); 
+    const paredSala3PeqGeometry = new THREE.BoxGeometry(15, 30, 1);
+    const paredSala3PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffa7 });
     const sala3Peq = new THREE.Mesh(paredSala3PeqGeometry, paredSala3PeqMaterial);
-    sala3Peq.rotation.y = -Math.PI / 2;  
-    sala3Peq.position.set(-25, 9, 60); 
+    sala3Peq.rotation.y = -Math.PI / 2;
+    sala3Peq.position.set(-25, 9, 60);
     scene.add(sala3Peq);
-}
+
+    // Cargar el objeto 3D - mano
+    const objLoader = new OBJLoader();
+    objLoader.load('modulos/hand.obj', (object) => {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // Crear material con texturas
+                child.material = new THREE.MeshStandardMaterial({
+                    map: albedoTextureM
+                });
+            }
+        });
+
+        object.position.set(-100, 0, 45);
+        object.scale.set(6, 6, 6);
+        scene.add(object);
+        mano = object;
+    });
+
+    // Cargar el objeto 3D - rostro
+    const objCabeza = new OBJLoader();
+    objCabeza.load('modulos/head.obj', (object) => {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // Crear material con texturas
+                child.material = new THREE.MeshStandardMaterial({ color: 0xefe5de });
+            }
+        });
+
+        object.position.set(-105, 0, 10);
+        object.scale.set(10, 10, 10);
+        scene.add(object);
+        cabeza = object;
+    });
+
+    // Cargar el objeto 3D - casco
+    const objCasco = new OBJLoader();
+    objCasco.load('modulos/casco.obj', (object) => {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // Crear material con texturas
+                child.material = new THREE.MeshStandardMaterial({
+                    map: albedoTextureCasco
+                });
+            }
+        });
+
+        object.position.set(-43, 9.5, 10);
+        object.scale.set(0.5, 0.5, 0.5);
+        scene.add(object);
+        casco = object;
+    });
+
+    // Cargar el objeto 3D - samurai
+    const objSamurai = new OBJLoader();
+    objSamurai.load('modulos/samurai.obj', (object) => {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // Crear material con texturas
+                child.material = new THREE.MeshStandardMaterial({
+                    map: albedoTextureS
+                });
+            }
+        });
+
+        object.position.set(-75, 1, 25);
+        object.scale.set(3, 3, 3);
+        scene.add(object);
+        samurai = object;
+    });
+
+    // Cargar el objeto 3D - monedas
+    const objCaballo = new OBJLoader();
+    objCaballo.load('modulos/monedas.obj', (object) => {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // Crear material con texturas
+                child.material = new THREE.MeshStandardMaterial({
+                    map: albedoTextureCuadro,
+                    normalMap: normalTextureCuadro,
+                    roughnessMap: roughnessTextureCuadro,
+                    aoMap: aoTextureCuadro,
+                    metalnessMap: metalnessTextureCuadro,
+                    displacementMap: displacementTextureCuadro,
+                    displacementScale: 0.2
+                });
+            }
+        });
+
+        object.position.set(-42, 1.5, 54);
+        object.rotation.x = Math.PI / 2;
+        object.scale.set(0.2, 0.2, 0.2);
+        scene.add(object);
+        monedas = object;
+    });
+};
+
+// Crear la caja de vidrio y controlador
+const entradaMurosGeometry = new THREE.BoxGeometry(10, 12, 18.5);
+const entradaMurosMaterial = new THREE.MeshStandardMaterial({
+    map: albedoTexture3,
+    normalMap: normalTexture3,
+    roughnessMap: roughnessTexture3,
+    aoMap: aoTexture3,
+    displacementMap: displacementTexture3,
+    displacementScale: 0.2
+});
+const muros = new THREE.Mesh(entradaMurosGeometry, entradaMurosMaterial);
+muros.position.set(-20.5, -11, 89);
+scene.add(muros);
+
+const muros2 = muros.clone();
+muros2.position.set(20.5, -11, 89);
+scene.add(muros2);
+
+const vidrioGeometry = new THREE.BoxGeometry(25, 30, 40);
+const vidrioMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x888888,
+    metalness: 0.1,
+    roughness: 0.1,
+    transmission: 1.0,
+    opacity: 0.25,
+    transparent: true,
+    side: THREE.DoubleSide
+});
+
+const vidrio = new THREE.Mesh(vidrioGeometry, vidrioMaterial);
+vidrio.position.set(-100, 0, 45);
+scene.add(vidrio);
+
+const vidrio2 = vidrio.clone();
+vidrio2.position.set(-105, 0, 10);
+scene.add(vidrio2);
+
+const vidrio3 = vidrio.clone();
+vidrio3.position.set(-43, 0, 10);
+scene.add(vidrio3);
+
+const vidrio4 = vidrio.clone();
+vidrio4.position.set(-75, 0, 25);
+scene.add(vidrio4);
+
+const vidrio5 = vidrio.clone();
+vidrio5.position.set(-43, 0, 50);
+scene.add(vidrio5);
+
+// Crear una base para un objeto
+const baseGeometry = new THREE.CylinderGeometry(10, 10, 2, 32);
+const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+const base = new THREE.Mesh(baseGeometry, baseMaterial);
+base.position.set(-100, 0, 45);
+scene.add(base);
+
+const base2 = base.clone();
+base2.position.set(-105, 0, 10);
+scene.add(base2);
+
+const base3 = base.clone();
+base3.position.set(-43, 0, 10);
+scene.add(base3);
+
+const base4 = base.clone();
+base4.position.set(-75, 0, 25);
+scene.add(base4);
+
+const base5 = base.clone();
+base5.position.set(-43, 0, 50);
+scene.add(base5);
+
+
+    // // Crear base de brazo
+    // const baseGeometry = new THREE.BoxGeometry(0.7, 3, 0.5); 
+    // const baseMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Marrón 
+    // const baseMano = new THREE.Mesh(baseGeometry, baseMaterial); 
+    // baseMano.position.set(0, 3, 0);
+    // baseMano.rotation.x = -Math.PI / 4; 
+    // scene.add(baseMano); 
+
+    // const base2Geometry = new THREE.BoxGeometry(0.5, 3, 0.5); 
+    // const base2Material = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Marrón 
+    // const baseMano2 = new THREE.Mesh(base2Geometry, base2Material); 
+    // baseMano2.position.set(1, 3, 0);
+    // baseMano2.rotation.x = -Math.PI / 4; 
+    // scene.add(baseMano2); 
+
+    // // Crear la palma 
+    // const palmaGeometry = new THREE.SphereGeometry(1, 32, 32); // Radio y segmentos del círculo 
+    // const palmaMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); 
+    // const palmaMano = new THREE.Mesh(palmaGeometry, palmaMaterial); 
+    // palmaMano.position.set(0.5, 5, -2);
+    // palmaMano.rotation.x = -Math.PI / 4; 
+    // scene.add(palmaMano);
+
+    // palmaMano.scale.x = 1.5; // Escalar en el eje X 
+    // palmaMano.scale.y = 1;
+
+    // // Crear los dedos 
+    // const dedosGeometry = new THREE.BoxGeometry(0.3, 1.5, 0.5); 
+    // const dedosMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
+    // const dedos = new THREE.Mesh(dedosGeometry, dedosMaterial); 
+    // dedos.rotation.x = -Math.PI / 4; 
+    // dedos.position.set(0, 6.5, -3.5);
+    // scene.add(dedos);
+
+    // const dedos2 = dedos.clone(); 
+    // dedos2.position.set(0.5, 6.5, -3.5); 
+    // scene.add(dedos2);
+
+    // const dedos3 = dedos.clone(); 
+    // dedos3.position.set(1.0, 6.5, -3.5); 
+    // scene.add(dedos3);
+    
+    // const dedos4 = dedos.clone(); 
+    // dedos4.rotation.x = -Math.PI / 3; 
+    // dedos4.position.set(1.5, 6.5, -3.5);
+    // scene.add(dedos4);
+
+    // // Segunda falanje
+    // const falanjesGeometry = new THREE.BoxGeometry(0.3, 1, 0.5); 
+    // const falanjesMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
+    // const falanjes = new THREE.Mesh(falanjesGeometry, falanjesMaterial); 
+    // falanjes.rotation.x = Math.PI / 2; 
+    // falanjes.position.set(0, 7, -4);
+    // scene.add(falanjes);
+
+    // const dedosF = falanjes.clone(); 
+    // dedos4.rotation.x = -Math.PI / 3; 
+    // dedosF.position.set(0, 7, -3.5); 
+    // scene.add(dedosF);
+
+
+
+    // function createFinger(x, y, z) { 
+    //     const fingerGeometry = new THREE.BoxGeometry(0.5, 3, 0.5); 
+    //     const fingerMaterial = new THREE.MeshStandardMaterial({ color: 0xffcba4 }); // Trigo 
+    //     const finger = new THREE.Mesh(fingerGeometry, fingerMaterial); 
+    //     finger.position.set(x, y, z); 
+    //     return finger; 
+    // } 
+    // Dedo pulgar 
+    // const thumb = createFinger(-2, 5, 0); 
+    // thumb.rotation.x = Math.PI / 4; // Rotar el pulgar 
+    // scene.add(thumb); 
+    // Dedo índice 
+    // const indexFinger = createFinger(1.5, 7, 0); 
+    // scene.add(indexFinger); 
+    // Dedo medio 
+    // const middleFinger = createFinger(0.5, 7, 0); 
+    // scene.add(middleFinger); 
+    // Dedo anular 
+    // const ringFinger = createFinger(-0.5, 7, 0); 
+    // scene.add(ringFinger); 
+    // Dedo meñique 
+    // const pinkyFinger = createFinger(-1.5, 7, 0); 
+    // pinkyFinger.rotation.x = -Math.PI / 6; // Rotar el meñique 
+    // scene.add(pinkyFinger);
+
 
 // Llamada a cada función
 creacionCastillo();
@@ -966,6 +1273,14 @@ const light = new THREE.AmbientLight(0xFFFFFF, 3);
 scene.add(light);
 
 function animate() {
+
+
+    // Animaciones sala 3
+
+    // Animación escultura centro
+    if (mano) { // Animación escultura centro
+         mano.rotation.y += 0.01; }
+
     controls.update();
     renderer.render(scene, camera);
 }
