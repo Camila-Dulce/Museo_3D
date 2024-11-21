@@ -19,41 +19,43 @@ const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
 camera.position.set(0, 60, -80);
 
 let controls = new OrbitControls(camera, renderer.domElement);
+
 // stats
 let container = document.getElementById('container');
 const stats = new Stats();
 container.appendChild(stats.dom);
 
-// dat.GUI
-const gui = new GUI();
-gui.close();
+let mano, cabeza, casco, samurai, monedas;
 
 let params = {
     color1: new THREE.Color(0xffffff),
     intensidad1: 10,
-    distancia: 22,
+    distancia: 17,
     decay: 0.5,
 
     color2: new THREE.Color(0xddd622),
     intensidad2: 6,
 
+    color3: new THREE.Color(0xd43939),
+    intensidad3: 6,
+    distancia3: 0,
+    angulo: Math.PI / 2,
+    decay3: 2,
+    penumbra: 0,
+
+    escalaX: 1,  
+    escalaY: 1,  
+    escalaZ: 1,  
+
+    posicionX: 0,  
+    posicionY: 0,  
+    posicionZ: 0,  
+
+    rotacionX: 0,  
+    rotacionY: 0,  
+    rotacionZ: 0   
+
 };
-
-// GUI folders and controls / (object, property, [min], [max], [step])
-
-const PointLight = gui.addFolder("Point");
-PointLight.addColor(params, "color1");
-PointLight.add(params, "intensidad1", 0, 10, 0.05);
-PointLight.add(params, "distancia", -10, 100, 1);
-PointLight.add(params, "decay", 0, 5, 0.5)
-.onChange(ActualizarLuz);
-
-const RectAreaLight = gui.addFolder("RectArea");
-RectAreaLight.addColor(params, "color2");
-RectAreaLight.add(params, "intensidad2", 0, 10, 0.05)
-.onChange(ActualizarLuz);
-
-
 
 // Importación de texturas 
 const textureLoader = new THREE.TextureLoader();
@@ -331,7 +333,6 @@ const aoTextureCuadro = textureLoader.load('./texturas/cuadroAO.jpg');
 const displacementTextureCuadro = textureLoader.load('./texturas/cuadroHei.jpg'); 
 const metalnessTextureCuadro = textureLoader.load('./texturas/cuadroMetal.jpg');
 
-
 // Ajustes
 albedoTextureCuadro.wrapS = THREE.RepeatWrapping; 
 albedoTextureCuadro.wrapT = THREE.RepeatWrapping; 
@@ -360,7 +361,6 @@ const albedoTextureTapete = textureLoader.load('./texturas/tapete.jpg');
 albedoTextureTapete.wrapS = THREE.RepeatWrapping; 
 albedoTextureTapete.wrapT = THREE.RepeatWrapping; 
 albedoTextureTapete.repeat.set(3, 5); 
-
 
 const creacionCastillo = () => {
 
@@ -1021,7 +1021,6 @@ const crearSala2 = () => {
         scene.add(cubo23);
 }
 
-let mano, cabeza, casco, samurai, monedas;
 
 const crearSala3 = () => {
     // Pared Mitad inferior vertical Pequeña
@@ -1030,6 +1029,7 @@ const crearSala3 = () => {
     const sala3Peq = new THREE.Mesh(paredSala3PeqGeometry, paredSala3PeqMaterial);
     sala3Peq.rotation.y = -Math.PI / 2;
     sala3Peq.position.set(-25, 9, 60);
+    sala3Peq.castShadow = true; 
     scene.add(sala3Peq);
 
     // Cargar el objeto 3D - mano
@@ -1041,6 +1041,8 @@ const crearSala3 = () => {
                 child.material = new THREE.MeshStandardMaterial({
                     map: albedoTextureM
                 });
+                child.castShadow = true; 
+                child.receiveShadow = true; 
             }
         });
 
@@ -1057,6 +1059,8 @@ const crearSala3 = () => {
             if (child.isMesh) {
                 // Crear material con texturas
                 child.material = new THREE.MeshStandardMaterial({ color: 0xefe5de });
+                child.castShadow = true;
+                child.receiveShadow = true; 
             }
         });
 
@@ -1076,6 +1080,8 @@ const crearSala3 = () => {
                 child.material = new THREE.MeshStandardMaterial({
                     map: albedoTextureCasco
                 });
+                child.castShadow = true; 
+                child.receiveShadow = true; 
             }
         });
 
@@ -1084,6 +1090,62 @@ const crearSala3 = () => {
         object.scale.set(0.2, 0.2, 0.2);
         scene.add(object);
         casco = object;
+
+    // Actualizar las propiedades del casco
+    params.escalaX = casco.scale.x;
+    params.escalaY = casco.scale.y;
+    params.escalaZ = casco.scale.z;
+
+    params.posicionX = casco.position.x;
+    params.posicionY = casco.position.y;
+    params.posicionZ = casco.position.z;
+
+    params.rotacionX = casco.rotation.x;
+    params.rotacionY = casco.rotation.y;
+    params.rotacionZ = casco.rotation.z;
+
+    // Iniciar dat.GUI después de cargar el casco
+    const gui = new GUI();
+    gui.close();
+
+// GUI folders and controls / (object, property, [min], [max], [step])
+
+const PointLight = gui.addFolder("Luz_EsculturaCabeza");
+PointLight.addColor(params, "color1");
+PointLight.add(params, "intensidad1", 0, 10, 0.05);
+PointLight.add(params, "distancia", -10, 100, 1);
+PointLight.add(params, "decay", 0, 5, 0.5)
+.onChange(ActualizarLuz);
+
+const RectAreaLight = gui.addFolder("Luz_EstanteSamurai");
+RectAreaLight.addColor(params, "color2");
+RectAreaLight.add(params, "intensidad2", 0, 10, 0.05)
+.onChange(ActualizarLuz);
+
+const SpotLight = gui.addFolder("Luz_SpotCabeza");
+SpotLight.addColor(params, "color3");
+SpotLight.add(params, "intensidad3", 0, 10, 0.05);
+SpotLight.add(params, "distancia3", -10, 20, 1);
+SpotLight.add(params, "penumbra", 0, 1, 0.001);
+SpotLight.add(params, "angulo", 0, 5, (6.2 / 2), (6.2 / 2) / 360);
+SpotLight.add(params, "decay3", 0, 5, 0.5)
+.onChange(ActualizarLuz);
+
+const cascoFolder = gui.addFolder("CascoPropiedades")
+cascoFolder.add(params, "escalaX", 0.1, 10).onChange(value => casco.scale.x = value);
+cascoFolder.add(params, "escalaY", 0.1, 10).onChange(value => casco.scale.y = value);
+cascoFolder.add(params, "escalaZ", 0.1, 10).onChange(value => casco.scale.z = value);
+
+cascoFolder.add(params, "posicionX", -200, 200).onChange(value => casco.position.x = value);
+cascoFolder.add(params, "posicionY", -200, 200).onChange(value => casco.position.y = value);
+cascoFolder.add(params, "posicionZ", -200, 200).onChange(value => casco.position.z = value);
+
+cascoFolder.add(params, "rotacionX", -Math.PI, Math.PI).onChange(value => casco.rotation.x = value);
+cascoFolder.add(params, "rotacionY", -Math.PI, Math.PI).onChange(value => casco.rotation.y = value);
+cascoFolder.add(params, "rotacionZ", -Math.PI, Math.PI).onChange(value => casco.rotation.z = value);
+
+cascoFolder.open();
+
     });
 
     // Cargar el objeto 3D - samurai
@@ -1095,6 +1157,8 @@ const crearSala3 = () => {
                 child.material = new THREE.MeshStandardMaterial({
                     map: albedoTextureS
                 });
+                child.castShadow = true; 
+                child.receiveShadow = true; 
             }
         });
 
@@ -1119,6 +1183,8 @@ const crearSala3 = () => {
                     displacementMap: displacementTextureCuadro,
                     displacementScale: 0.2
                 });
+                child.castShadow = true; 
+                child.receiveShadow = true; 
             }
         });
 
@@ -1141,6 +1207,8 @@ const vidrioMaterial = new THREE.MeshPhysicalMaterial({
 
 const vidrio = new THREE.Mesh(vidrioGeometry, vidrioMaterial);
 vidrio.position.set(-75, 0, 25);
+vidrio.castShadow = true; 
+vidrio.receiveShadow = true; 
 scene.add(vidrio);
 
 // Crear una base para un objeto
@@ -1148,6 +1216,8 @@ const baseGeometry = new THREE.CylinderGeometry(7, 7, 2, 32);
 const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x423f3e});
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
 base.position.set(-100, 0, 45);
+base.castShadow = true; 
+base.receiveShadow = true; 
 scene.add(base);
 
 const base2 = base.clone();
@@ -1175,54 +1245,90 @@ const TapeteMaterial = new THREE.MeshStandardMaterial({
 const tapete = new THREE.Mesh(TapeteGeometry, TapeteMaterial); 
 tapete.rotation.x = -Math.PI / 2;  
 tapete.position.set(-75, -5, 25);
+tapete.receiveShadow = true; 
 scene.add(tapete);
 
 };
 
     // Luces point
     const pointLight = new THREE.PointLight(0xffffff, params.intensidad1, params.distancia, params.decay);
-    pointLight.position.set(-105, 3, 10); // Ajustar la posición encima de la base2
+    pointLight.position.set(-105, 3, 10); 
+    pointLight.castShadow = true; 
     scene.add(pointLight);
     pointLight.castShadow = true;
-
-    const pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
-    scene.add(pointLightHelper);
 
     // Luz 2
     // Clonar la luz y cambiar posición 
     const pointLight2 = pointLight.clone(); 
     pointLight2.position.set(-43, 5, 10); // Ajustar la posición para la segunda luz 
+    pointLight2.castShadow = true; // Emitir sombra 
     scene.add(pointLight2);
-
-    const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1); 
-    scene.add (pointLightHelper2);
 
     // Luz 3
     // Clonar la luz y cambiar posición 
     const pointLight3 = pointLight.clone(); 
     pointLight3.position.set(-43, 3, 45); // Ajustar la posición para la segunda luz 
+    pointLight3.castShadow = true; // Emitir sombra 
     scene.add(pointLight3);
-
-    const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 1); 
-    scene.add (pointLightHelper3);
 
     // Luz 4
     // Clonar la luz y cambiar posición 
     const pointLight4 = pointLight.clone(); 
     pointLight4.position.set(-100, 3, 45); // Ajustar la posición para la segunda luz 
+    pointLight4.castShadow = true; // Emitir sombra 
     scene.add(pointLight4);
 
-    const pointLightHelper4 = new THREE.PointLightHelper(pointLight4, 1); 
-    scene.add (pointLightHelper4);
+    // const pointLightHelper4 = new THREE.PointLightHelper(pointLight4, 1); 
+    // scene.add (pointLightHelper4);
 
     // Luces Rect
-    const widthAr = 5;
-    const heightAr = 5;
+    const widthAr = 10;
+    const heightAr = 10;
     const intensity = 1;
     const rectLight = new THREE.RectAreaLight(0xffffff, intensity, widthAr, heightAr);
-    rectLight.position.set(-75, 25, 25);
+    rectLight.position.set(-87.5, 25, 25);
     rectLight.lookAt(0, -25, 0);
     scene.add(rectLight);
+
+    // Luces Spot - cabeza
+    const spotLight = new THREE.SpotLight(0xd43939);
+    spotLight.castShadow = true;
+    spotLight.position.set(-43, 20, 10);
+    spotLight.target.position.set(-43, 0, 10);
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+    scene.add(spotLight.target);
+
+    // Luz spot 2 - casco
+    const spotLight2 = spotLight.clone(); 
+    spotLight2.target.position.set(-43, 20, 10);
+    spotLight2.position.set(-43, 10, 10); 
+    scene.add(spotLight2);
+
+    // Luz spot 3 - monedas
+    const spotLight3 = spotLight.clone(); 
+    spotLight3.target.position.set(-43, 20, 45);
+    spotLight3.position.set(-42, 5, 7); 
+    spotLight3.castShadow = true;
+    scene.add(spotLight3);
+
+    // Luz spot 4 - mano
+    const spotLight4 = spotLight.clone(); 
+    spotLight4.target.position.set(-100, 20, 45);
+    spotLight4.position.set(-100, 9, 45); 
+    spotLight4.castShadow = true;
+    scene.add(spotLight4);
+
+    
+// Sombras
+renderer.shadowMap.enabled = true; 
+
+//cast 
+pointLight.castShadow = true; 
+pointLight.castShadow = true; 
+
+    let angulo = 0; 
+
 
     function ActualizarLuz() {
         pointLight.color.set(params.color1);
@@ -1233,6 +1339,12 @@ scene.add(tapete);
         rectLight.color.set(params.color2);
         rectLight.intensity = params.intensidad2;
 
+        spotLight.color.set(params.color3);
+        spotLight.intensity = params.intensidad3;
+        spotLight.distance = params.distancia3;
+        spotLight.decay = params.decay3;
+        spotLight.penumbra = params.penumbra;
+        spotLight.angle = params.angulo;
     };
 
 // Llamada a cada función
@@ -1253,13 +1365,25 @@ function animate() {
          samurai.rotation.y += 0.01; }
 
     // Luces
-    pointLight.color.set(params.color1);
-    pointLight.intensity = params.intensidad1;
-    pointLight.distance = params.distancia;
-    pointLight.decay = params.decay;
+    spotLight.position.x = -105 + 10 * Math.cos(angulo); 
+    spotLight.position.z = 10 + 10 * Math.sin(angulo); 
+    
+    spotLight2.position.x = -43 + 5 * Math.cos(angulo + Math.PI / 2); 
+    spotLight2.position.z = 10 + 5 * Math.sin(angulo + Math.PI / 2); 
+    
+    spotLight3.position.x = -43 + 5 * Math.cos(angulo + Math.PI); 
+    spotLight3.position.z = 45 + 5 * Math.sin(angulo + Math.PI); 
+    
+    spotLight4.position.x = -100 + 5 * Math.cos(angulo + (3 * Math.PI) / 2); 
+    spotLight4.position.z = 45 + 5 * Math.sin(angulo + (3 * Math.PI) / 2);
+
+    angulo += 0.01;
 
     controls.update();
     renderer.render(scene, camera);
+
+    ActualizarLuz();
+
 };
 
 
