@@ -1386,9 +1386,9 @@ crearSala1();
 crearSala2();
 crearSala3();
 
-// Luz provisional
-const light = new THREE.AmbientLight(0xFFFFFF, 3);
-scene.add(light);
+// // Luz provisional
+// const light = new THREE.AmbientLight(0xFFFFFF, 3);
+// scene.add(light);
 
 let color = 0;
 const velocidad = 0.05;
@@ -1399,7 +1399,7 @@ function animate() {
 
 	// Animación escultura centro
 	if (samurai) { // Animación escultura centro
-		samurai.rotation.y += 0.01;
+		samurai.rotation.y += 0.1;
 		seguimientoCamara.position.set(samurai.position.x, samurai.position.y + 10, samurai.position.z + 20);
 		seguimientoCamara.lookAt(samurai.position);
 	}
