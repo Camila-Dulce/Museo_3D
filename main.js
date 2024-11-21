@@ -27,6 +27,7 @@ container.appendChild(stats.dom);
 
 let mano, cabeza, casco, samurai, monedas;
 
+
 let params = {
     color1: new THREE.Color(0xffffff),
     intensidad1: 10,
@@ -698,6 +699,7 @@ const creacionCastillo = () => {
 
 };
 
+let dragon;
 const crearSala1 = () => {
     // Pared Derecha Vertical Grande
     const paredSala1traGeometry = new THREE.BoxGeometry(40, 30, 1); 
@@ -733,16 +735,31 @@ const crearSala1 = () => {
         cubo3.position.set(75, -5, -7); 
         scene.add(cubo3);
 
-         //Muro Separación
-         const geometry4 = new THREE.BoxGeometry(58, 29, 1); 
-         const material4 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
-         const cubo4 = new THREE.Mesh(geometry4, material4);
-         cubo4.rotation.y = -Math.PI / 2; 
-         cubo4.position.set(75, 9, -7); 
-         scene.add(cubo4);
-        
+        // Cargar  texturas, cada lado del muro
+        const textureLoader = new THREE.TextureLoader();
+        const frontTexture = textureLoader.load('./imagenes/pintura.jpg'); 
+        const backTexture = textureLoader.load('./imagenes/pintura1.jpg');  
+
+        const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        // Crear materiales para cada cara
+        const materials = [
+            defaultMaterial, // Lado derecho
+            defaultMaterial, // Lado izquierdo
+            defaultMaterial, // Lado superior
+            defaultMaterial, // Lado inferior
+            new THREE.MeshBasicMaterial({ map: frontTexture }), // Frente
+            new THREE.MeshBasicMaterial({ map: backTexture })   // Parte trasera 
+
+        ];
+        // Muro separacion
+        const geometry4 = new THREE.BoxGeometry(58, 32, 1);
+        const cubo4 = new THREE.Mesh(geometry4, materials);
+        cubo4.rotation.y = -Math.PI / 2; 
+        cubo4.position.set(75, 14, -7); 
+        scene.add(cubo4);
+
         // Base 
-        const geometry2 = new THREE.BoxGeometry(62, 29, 21.7); // Dimensiones ajustadas a la mitad
+        const geometry2 = new THREE.BoxGeometry(62, 32, 21.7); // Dimensiones ajustadas a la mitad
         const material2 = new THREE.MeshPhongMaterial({
         color: 0xffffff,       
         transparent: true,     // Habilita la transparencia
@@ -752,60 +769,27 @@ const crearSala1 = () => {
         });
         const cubo2 = new THREE.Mesh(geometry2, material2);
         cubo2.rotation.y = -Math.PI / 2; 
-        cubo2.position.set(75, 9, -7);
+        cubo2.position.set(75, 14, -7);
         scene.add(cubo2);
+        //Base arriba
+        const geometry111 = new THREE.BoxGeometry(64.2, 4.7, 23.8); 
+        const material111 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
+        const cubo111 = new THREE.Mesh(geometry111, material111);
+        cubo111.rotation.y = -Math.PI / 2;
+        cubo111.rotation.x = 3.1416 
+        cubo111.position.set(75, 32, -7); 
+        scene.add(cubo111);
     
-    // Vitrina 2.1
-        // Soporte base siiiiiiiiii
-        const geometry24 = new THREE.BoxGeometry(11.9, 11, 11.9); 
-        const material24 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo24 = new THREE.Mesh(geometry24, material24);
-         
-        cubo24.position.set(45, -0.5, -75); //0, -1.5, -74
-        scene.add(cubo24);
-
-        const geometry25 = new THREE.BoxGeometry(13, 9.8, 12); 
-        const material25 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo25 = new THREE.Mesh(geometry25, material25);
-         
-        cubo25.position.set(45,-0.5,-75); 
-        scene.add(cubo25);
-
-        const geometry26 = new THREE.BoxGeometry(12, 9.8, 13); 
-        const material26 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo26 = new THREE.Mesh(geometry26, material26);
-         
-        cubo26.position.set(45,-0.5,-75); 
-        scene.add(cubo26);
-
-        //Vidrio
-        const geometry27 = new THREE.BoxGeometry(12, 16, 12); 
-        const material27 = new THREE.MeshPhongMaterial({
-            color: 0xffffff,       
-            transparent: true,     
-            opacity: 0.4,          
-            shininess: 100,        
-            reflectivity: 0.7,     
-            });
-            const cubo27 = new THREE.Mesh(geometry27, material27);
-         
-            cubo27.position.set(45,12,-75); 
-        scene.add(cubo27);
-
-        const geometry28 = new THREE.BoxGeometry(10, 0.5, 10); 
-        const material28 = new THREE.MeshBasicMaterial({ color: 0x646464 });
-        const cubo28 = new THREE.Mesh(geometry28, material28);
-         
-        cubo28.position.set(45,4.9,-75); 
-        scene.add(cubo28);
-
-        const geometry29 = new THREE.BoxGeometry(8, 0.7, 8); 
-        const material29 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
-        const cubo29 = new THREE.Mesh(geometry29, material29);
-         
-        cubo29.position.set(45,4.9,-75); 
-        scene.add(cubo29);
-
+        //Piso Base arriba
+        const geometry112 = new THREE.BoxGeometry(60, 5.1, 19.7); 
+        const material112 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        const cubo112 = new THREE.Mesh(geometry112, material112);
+        cubo112.rotation.y = -Math.PI / 2; 
+        cubo112.rotation.x = 3.1416
+        cubo112.position.set(75, 31.4, -7); 
+        scene.add(cubo112);
+    
+ 
          // Vitrina 2 
         // Soporte base 
         const geometry5 = new THREE.BoxGeometry(11.9, 11, 11.9); 
@@ -891,136 +875,35 @@ const crearSala1 = () => {
 
     // Vitrina 4 
         // Soporte base 
-        const geometry14 = new THREE.BoxGeometry(30.9, 11, 11.9); 
+        const geometry14 = new THREE.BoxGeometry(60.9, 6, 15.9); 
         const material14 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
         const cubo14 = new THREE.Mesh(geometry14, material14);
          
-        cubo14.position.set(90, -0.5, 58); //0, -1.5, -74
+        cubo14.position.set(-48, -0.5, -105); 
+        
         scene.add(cubo14);
-
-        const geometry15 = new THREE.BoxGeometry(32, 9.8, 12); 
-        const material15 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo15 = new THREE.Mesh(geometry15, material15);
-         
-        cubo15.position.set(90,-0.5,58); 
-        scene.add(cubo15);
-
-        const geometry16 = new THREE.BoxGeometry(31, 9.8, 13); 
-        const material16 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo16 = new THREE.Mesh(geometry16, material16);
-         
-        cubo16.position.set(90,-0.5,58); 
-        scene.add(cubo16);
-
+    
         //Vidrio
-        const geometry17 = new THREE.BoxGeometry(31, 16, 12); 
-        const material17 = new THREE.MeshPhongMaterial({
+        const geometry15 = new THREE.BoxGeometry(24, 16, 24); 
+        const material15 = new THREE.MeshPhongMaterial({
             color: 0xffffff,       
             transparent: true,     
             opacity: 0.4,          
             shininess: 100,        
             reflectivity: 0.7,     
             });
-            const cubo17 = new THREE.Mesh(geometry17, material17);
+            const cubo15 = new THREE.Mesh(geometry15, material15);
          
-        cubo17.position.set(90,12,58); 
-        scene.add(cubo17);
-
-        const geometry18 = new THREE.BoxGeometry(29, 0.5, 10); 
-        const material18 = new THREE.MeshBasicMaterial({ color: 0x646464 });
-        const cubo18 = new THREE.Mesh(geometry18, material18);
-         
-        cubo18.position.set(90,4.9,58); 
-        scene.add(cubo18);
-
-        const geometry19 = new THREE.BoxGeometry(27, 0.7, 8); 
-        const material19 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
-        const cubo19 = new THREE.Mesh(geometry19, material19);
-         
-        cubo19.position.set(90,4.9,58); 
-        scene.add(cubo19);
-
-    // const light = new THREE.DirectionalLight(0xffffff, 1);
-    // light.position.set(10, 20, 10);
-    // scene.add(light);
-
-    // Varillas base 
-    // const geometry3 = new THREE.BoxGeometry(0.7, 16.7, 0.7); 
-    // const material3 = new THREE.MeshBasicMaterial({ color: 0xc1e246 });
-    // const cubo3 = new THREE.Mesh(geometry3, material3);
-    // cubo3.position.set(0, 22.5045, 10.002); 
-    // scene.add(cubo3);
-
-}
-
-const crearSala2 = () => {
-
-    // Pared Mitad Horizontal Grande
-    const paredSala2Geometry = new THREE.BoxGeometry(90, 30, 1); 
-    const paredSala2Material = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
-    const sala2 = new THREE.Mesh(paredSala2Geometry, paredSala2Material);
-    sala2.position.set(-20, 9, -11); 
-    scene.add(sala2);
-
-    // Pared Mitad Superior Pequeña
-    const paredSala2PeqGeometry = new THREE.BoxGeometry(15, 30, 1); 
-    const paredSala2PeqMaterial = new THREE.MeshStandardMaterial({ color: 0x000000}); 
-    const sala2Peq = new THREE.Mesh(paredSala2PeqGeometry, paredSala2PeqMaterial);
-    sala2Peq.rotation.y = -Math.PI / 2;  
-    sala2Peq.position.set(-25, 9, -76); 
-    scene.add(sala2Peq);
-
-    const salaPeq = sala2Peq.clone(); 
-    salaPeq.rotation.y = Math.PI;  
-    salaPeq.position.set(-116, 9, -10); 
-    scene.add(salaPeq);
-
-    // Pared Mitad Izquierda Vertical 
-    const paredSala1OtraGeometry = new THREE.BoxGeometry(65, 30, 1); 
-    const paredSala1OtraMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 }); 
-    const sala1O = new THREE.Mesh(paredSala1OtraGeometry, paredSala1OtraMaterial);
-    sala1O.rotation.y = -Math.PI / 2;  
-    sala1O.position.set(-25, 9, -6); 
-    scene.add(sala1O);
-
-    //Vitrina 1
-
-        // Soporte base 
-        const geometry20 = new THREE.BoxGeometry(64.2, 14, 23.8); 
-        const material20 = new THREE.MeshBasicMaterial({ color: 0x423f3e });
-        const cubo20 = new THREE.Mesh(geometry20, material20);
-        cubo20.position.set(-77, -5, -55); 
-        scene.add(cubo20);
+        cubo15.position.set(-48,12,-105); 
+        scene.add(cubo15);
     
-        //Piso Base
-        const geometry21 = new THREE.BoxGeometry(60, 11, 19.7); 
-        const material21 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
-        const cubo21 = new THREE.Mesh(geometry21, material21);
-        cubo21.position.set(-77, -2, -55); 
-        scene.add(cubo21);
-
-         //Muro Separación
-         const geometry22 = new THREE.BoxGeometry(58, 8, 1); 
-         const material22 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
-         const cubo22 = new THREE.Mesh(geometry22, material22);
-         cubo22.position.set(-77, 4, -55); 
-         scene.add(cubo22);
-        
-        // Vidrio 
-        const geometry23 = new THREE.BoxGeometry(62, 8, 21.7); 
-        const material23 = new THREE.MeshPhongMaterial({
-        color: 0xffffff,       
-        transparent: true,    
-        opacity: 0.4,          
-        shininess: 100,        
-        reflectivity: 0.7,  
-        });
-        const cubo23 = new THREE.Mesh(geometry23, material23);
-        
-        cubo23.position.set(-77, 4, -55);
-        scene.add(cubo23);
-}
-
+        const geometry16 = new THREE.BoxGeometry(20, 2, 24); 
+        const material16 = new THREE.MeshBasicMaterial({ color: 0xf6f6f6 });
+        const cubo16 = new THREE.Mesh(geometry16, material16);
+         
+        cubo16.position.set(-48,4.8,-105); 
+        scene.add(cubo16);
+    }
 
 const crearSala3 = () => {
     // Pared Mitad inferior vertical Pequeña
@@ -1052,7 +935,7 @@ const crearSala3 = () => {
         mano = object;
     });
 
-    // Cargar el objeto 3D - rostro
+    // Cargar el objeto 3D - Cabeza
     const objCabeza = new OBJLoader();
     objCabeza.load('modulos/head.obj', (object) => {
         object.traverse((child) => {
@@ -1188,7 +1071,7 @@ cascoFolder.open();
             }
         });
 
-        object.position.set(-42, 4, 47); 
+        object.position.set(-42, 6, 47); 
         object.rotation.x = Math.PI / 2;
         object.scale.set(0.1, 0.1, 0.1);
         scene.add(object);
@@ -1357,6 +1240,10 @@ crearSala3();
 const light = new THREE.AmbientLight(0xFFFFFF, 3);
 scene.add(light);
 
+let color = 0;
+const velocidad = 0.05;
+const clock = new THREE.Clock();
+
 function animate() {
     // Animaciones sala 3
 
@@ -1379,13 +1266,31 @@ function animate() {
 
     angulo += 0.01;
 
+    
+    // Animacion de escalado - Cabeza
+    const temp = clock.getDelta();
+    const elapsedTime = clock.getElapsedTime();
+
+    if (cabeza) {
+        const scale = 5 + 1 * Math.sin(elapsedTime * velocidad);
+        cabeza.scale.set(scale, scale, scale);
+    }
+
+    // Animacion de color cambiante  - Monedas
+    if (monedas) {
+        color += 0.1 * temp;
+        if (color > 1) color -= 1; 
+        monedas.traverse((child) => {
+            if (child.isMesh) {
+                child.material.color.setHSL(color, 0.5, 0.5);
+            }
+        });
+
+        monedas.rotation.x += 0.01;
+    }
+
     controls.update();
     renderer.render(scene, camera);
-
-    ActualizarLuz();
-
-};
-
-
-
-
+    ActualizarLuz();  
+    
+}
