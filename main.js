@@ -1280,24 +1280,21 @@ scene.add(pointLight);
 pointLight.castShadow = true;
 
 // Luz 2
-// Clonar la luz y cambiar posición 
 const pointLight2 = pointLight.clone();
-pointLight2.position.set(-43, 5, 10); // Ajustar la posición para la segunda luz 
-pointLight2.castShadow = true; // Emitir sombra 
+pointLight2.position.set(-43, 5, 10); 
+pointLight2.castShadow = true;  
 scene.add(pointLight2);
 
 // Luz 3
-// Clonar la luz y cambiar posición 
 const pointLight3 = pointLight.clone();
-pointLight3.position.set(-43, 3, 45); // Ajustar la posición para la segunda luz 
-pointLight3.castShadow = true; // Emitir sombra 
+pointLight3.position.set(-43, 3, 45); 
+pointLight3.castShadow = true; 
 scene.add(pointLight3);
 
 // Luz 4
-// Clonar la luz y cambiar posición 
 const pointLight4 = pointLight.clone();
-pointLight4.position.set(-100, 3, 45); // Ajustar la posición para la segunda luz 
-pointLight4.castShadow = true; // Emitir sombra 
+pointLight4.position.set(-100, 3, 45); 
+pointLight4.castShadow = true; 
 scene.add(pointLight4);
 
 // const pointLightHelper4 = new THREE.PointLightHelper(pointLight4, 1); 
@@ -1340,7 +1337,6 @@ spotLight4.target.position.set(-100, 20, 45);
 spotLight4.position.set(-100, 9, 45);
 spotLight4.castShadow = true;
 scene.add(spotLight4);
-
 
 // Sombras
 renderer.shadowMap.enabled = true;
@@ -1386,9 +1382,9 @@ crearSala1();
 crearSala2();
 crearSala3();
 
-// // Luz provisional
-// const light = new THREE.AmbientLight(0xFFFFFF, 3);
-// scene.add(light);
+// Luz provisional
+const light = new THREE.AmbientLight(0xFFFFFF, 0.5);
+scene.add(light);
 
 let color = 0;
 const velocidad = 0.05;
